@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int secretTime = 0;
     static final String scoreInfo = "Kushaal";
     static final String timeInfo = "Latupalli";
+    static boolean mushroomOut = false;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -122,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onAnimationRepeat(Animation animation) {
                     }
                 });
+                mushroomOut=false;
             }
             else if(appearList.get(moleList.indexOf(view)).equalsIgnoreCase("less"))
             {
@@ -142,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onAnimationRepeat(Animation animation) {
                     }
                 });
+                mushroomOut=false;
             }
 
         }
@@ -188,14 +192,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             while(time.intValue()>=1)
             {
-                int timeRandom = (int)(Math.random()+3000)+500;
+                int timeRandom = (int)(Math.random()+3000)+1000;
                 try {
                     TimeUnit.MILLISECONDS.sleep(timeRandom);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 clickedList.set(loc, false);
-                int random = (int)(Math.random()*5)+1;
+                int random = (int)(Math.random()*4)+1;
                 //Mole Appear
                 if(random==1)
                 {
@@ -280,11 +284,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }//if statement for random
                 else if(random==3&&time.intValue()<51)
                 {
+
                     random=(int)(Math.random()*2)+1;
+                    System.out.println(random+"mushrooms"+mushroomOut);
                     //More Time
-                    if(random==1)
+                    if(random==1&&time.intValue()<51&&mushroomOut==false)
                     {
+                        System.out.println("green");
                         appearList.set(loc,"more");
+                        mushroomOut=true;
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -352,11 +360,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     });
                                 }
                             });
+                            mushroomOut=false;
                         }
                     }
                     //Less Time
-                    else if(random==2&&time.intValue()>51)
+                    else if(random==2&&time.intValue()<51&&mushroomOut==false)
                     {
+                        System.out.println("purple");
+                        mushroomOut=true;
                         appearList.set(loc,"less");
                         runOnUiThread(new Runnable() {
                             @Override
@@ -426,6 +437,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 }
                             });
                         }
+                        mushroomOut=false;
                     }
                 }
                 try {
